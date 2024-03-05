@@ -71,7 +71,7 @@ class Watch(DateMixin, SlugMixin):
     case_size = models.FloatField()
     functionality = models.CharField(choices=get_choice("Functionality"), max_length=150)
     gender = models.CharField(choices=GENDER, max_length=150)
-    status = models.CharField(choices=STATUS, max_length=50)
+    status = models.CharField(choices=STATUS, default="Active", max_length=50)
     wishlist = models.ManyToManyField(Users, blank=True, related_name="wishlist")
     view_count = models.PositiveIntegerField(default=0)
 
