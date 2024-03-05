@@ -1,0 +1,292 @@
+{% extends 'base.html' %}
+{% block header %}
+
+{% load static %}
+
+<div class="header_bottom sticky-header">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-12">
+                        <div class="main_menu_inner">
+                           <div class="logo_sticky">
+                               <a href="index.html"><img src="{% static 'assets/img/logo/logo.png' %}" alt=""></a>
+                           </div>
+                            <div class="main_menu">
+                                <nav>
+                                    <ul>
+
+                                        <li ><a href="/">Home</a>
+                                        </li>
+                                        <li><a href="/shop/">Shop</a>
+                                        </li>
+                                        <li><a href="/about/">About Us</a></li>
+                                        <li><a href="/contact/">Contact</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+
+{% block content %}
+    
+    <!-- my account start  -->
+    <section class="main_content_area">
+        <div class="container">   
+            <div class="account_dashboard mt-5">
+                <div class="row">
+                    <div class="col-sm-12 col-md-3 col-lg-3">
+                        <!-- Nav tabs -->
+                        <div class="dashboard_tab_button">
+                            <ul role="tablist" class="nav flex-column dashboard-list">
+                                <li><a href="#dashboard" data-bs-toggle="tab" class="nav-link active">Dashboard</a></li>
+                                <li> <a href="#orders" data-bs-toggle="tab" class="nav-link">Orders</a></li>
+                                <li><a href="#wishlist" data-bs-toggle="tab" class="nav-link">Wishlist</a></li>
+                                <li><a href="#address" data-bs-toggle="tab" class="nav-link">Address</a></li>
+                                <li><a href="#account-details" data-bs-toggle="tab" class="nav-link">Account details</a></li>
+                                <li><a href="{% url 'account:logout' %}" class="nav-link">logout</a></li>
+                            </ul>
+                        </div>    
+                    </div>
+                    <div class="col-sm-12 col-md-9 col-lg-9">
+                        <!-- Tab panes -->
+                        <div class="tab-content dashboard_content">
+                            <div class="tab-pane fade show active" id="dashboard">
+                                <h3>Dashboard </h3>
+                                <p>From your account dashboard. you can easily check &amp; view your recent orders, manage your addresses and edit your password and account details.</a></p>
+                            </div>
+                            <div class="tab-pane fade" id="orders">
+                                <h3>Orders</h3>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Invoice ID</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Total</th>
+                                                <th>Actions</th>	 	 	 	
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for order, item_count in orders.items %}
+                                                <tr>
+                                                    <td># {{order.invoice_id}}</td>
+                                                    <td>{{order.created_at}}</td>
+                                                    <td><span class="success">Completed</span></td>
+                                                    <td> <strong style="color: green">${{order.total_paid}} </strong> for <strong>{{item_count}}</strong> item </td>
+                                                    <td><a href="{% url 'account:view_invoice' order.id %}" class="view">view</a></td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="wishlist">
+                                <h3>Wishlist</h3>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Price</th>
+                                                <th>Review</th>
+                                                <th>Remove</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for watch, price in wishlist.items %}
+                                            <tr id="wishRow-{{watch.id}}">
+                                                <td><a href="{% url 'watch:details' watch.id %}">{{watch.name}}</a></td>
+                                                <td>{{price.total_price}}</td>
+                                                <td><span class="danger">{{watch.rating}}</span></td>
+                                                <td><a onclick="wishlist({{watch.id}})" class="view"><i style="color: red; font-weight: bold; font-size: 1rem" title="Remove" class="bi bi-trash"></i></a></td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="address">
+                               <p>The following addresses will be used on the checkout page by default.</p>
+                                <h4 class="billing-address">Billing address</h4>
+                                <div class="login mt-3">
+                                    <div class="login_form_container">
+                                        <div class="account_login_form">
+                                            <form method="post">
+                                                {% csrf_token %}
+
+                                                <input type="hidden" name="addresseditform">
+
+                                                <label>First Name</label>
+
+                                                {{ address_form.first_name }}
+
+                                                {% if address_form.first_name.errors %}
+                                                    {% for error in address_form.first_name.errors %}
+                                                        <p style="color: red">{{ error|escape }}</p>
+                                                    {% endfor %}
+                                                {% endif %}
+
+
+                                                <label>Last Name</label>
+
+                                                {{ address_form.last_name }}
+
+                                                {% if address_form.last_name.errors %}
+                                                    {% for error in address_form.last_name.errors %}
+                                                        <p style="color: red">{{ error|escape }}</p>
+                                                    {% endfor %}
+                                                {% endif %}
+
+                                                <label>Company Name</label>
+
+                                                {{ address_form.company_name }}
+
+                                                {% if address_form.company_name.errors %}
+                                                    {% for error in address_form.company_name.errors %}
+                                                        <p style="color: red">{{ error|escape }}</p>
+                                                    {% endfor %}
+                                                {% endif %}
+
+                                                <label>Email</label>
+
+                                                {{ address_form.email }}
+
+                                                {% if address_form.email.errors %}
+                                                    {% for error in address_form.email.errors %}
+                                                        <p style="color: red">{{ error|escape }}</p>
+                                                    {% endfor %}
+                                                {% endif %}
+
+                                                <label>Address</label>
+
+                                                {{ address_form.address }}
+
+                                                {% if address_form.address.errors %}
+                                                    {% for error in address_form.address.errors %}
+                                                        <p style="color: red">{{ error|escape }}</p>
+                                                    {% endfor %}
+                                                {% endif %}
+
+                                                <label>Country</label> <br>
+
+                                                {{ address_form.country }}
+
+                                                {{order_form.country}}
+
+                                                <br><br>
+                                                <label>City</label>
+
+                                                {{ address_form.city }}
+
+                                                {% if address_form.city.errors %}
+                                                    {% for error in address_form.city.errors %}
+                                                        <p style="color: red">{{ error|escape }}</p>
+                                                    {% endfor %}
+                                                {% endif %}
+
+                                                <label>Phone</label>
+
+                                                {{ address_form.phone }}
+
+                                                {% if address_form.phone.errors %}
+                                                    {% for error in address_form.phone.errors %}
+                                                        <p style="color: red">{{ error|escape }}</p>
+                                                    {% endfor %}
+                                                {% endif %}
+
+                                                <label>Postal Code</label>
+
+                                                {{ address_form.postal_code }}
+
+                                                {% if address_form.postal_code.errors %}
+                                                    {% for error in address_form.postal_code.errors %}
+                                                        <p style="color: red">{{ error|escape }}</p>
+                                                    {% endfor %}
+                                                {% endif %}
+
+
+                                                <br>
+                                                <button type="submit" class="btn btn-success">Save</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="account-details">
+                                <h3>Account details </h3>
+                                <div class="login">
+                                    <div class="login_form_container">
+                                        <div class="account_login_form">
+                                            <form method="post" enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <label>Username</label>
+
+                                                <input type="hidden" name="usereditform">
+
+                                                {{ edit_form.username }}
+
+                                                {% if edit_form.username.errors %}
+                                                    {% for error in edit_form.username.errors %}
+                                                        <p style="color: red">{{ error|escape }}</p>
+                                                    {% endfor %}
+                                                {% endif %}
+
+                                                <label>Email</label>
+                                                {{ edit_form.email }}
+
+                                                {% if edit_form.email.errors %}
+                                                    {% for error in edit_form.email.errors %}
+                                                        <p style="color: red">{{ error|escape }}</p>
+                                                    {% endfor %}
+                                                {% endif %}
+
+                                                <label>Mobile Number</label>
+                                                {{ edit_form.mobile }}
+
+                                                {% if edit_form.mobile.errors %}
+                                                    {% for error in edit_form.mobile.errors %}
+                                                        <p style="color: red">{{ error|escape }}</p>
+                                                    {% endfor %}
+                                                {% endif %}
+
+                                                <label>Profile Photo</label>
+                                                <span style="font-size: 1rem">{{ edit_form.profile_photo }}</span>
+
+                                                {% if edit_form.profile_photo.errors %}
+                                                    {% for error in edit_form.profile_photo.errors %}
+                                                        <p style="color: red">{{ error|escape }}</p>
+                                                    {% endfor %}
+                                                {% endif %}
+                                                <br>
+                                                <button class="btn btn-success">Save</button>
+                                                <a href="{% url 'account:change-password' %}" class=" btn btn-outline-secondary">Change Password</a>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        </div>        	
+    </section>			
+    <!-- my account end   -->
+
+{% csrf_token %}
+
+<script>
+    const csrfToken = '{{ csrf_token }}';
+</script>
+
+<script src="{% static 'assets/js/wishlist.js' %}"></script>
+
+{% endblock %}

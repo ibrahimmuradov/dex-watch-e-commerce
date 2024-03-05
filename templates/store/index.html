@@ -1,0 +1,127 @@
+{% extends 'index-base.html' %}
+{% block body %}
+{% load static %}
+
+{{ block.super }}
+
+        
+        <!--slider area start-->
+        <div class="slider_area slider_black owl-carousel">
+            {% for watch in header_watches %}
+                <div class="single_slider" data-bgimg="{{watch.header_image.url}}">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-12">
+                                <div class="slider_content">
+                                    <p>exclusive offer -{{watch.discount}}% off this week</p>
+                                    <h1>{{watch.name}}</h1>
+                                    <span>{{watch.description|truncatewords:10}} </span>
+                                    <p class="slider_price">Total <span>${{watch.get_total_price}}</span></p>
+                                    <a class="button" href="{% url 'watch:details' watch.id %}">shopping now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <!--slider area end-->
+
+        <!--banner area start-->
+        <section class="banner_section banner_black">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-lg-4 col-md-6">
+                       <div class="single_banner">
+                           <div class="banner_thumb">
+                                <a href="{% url 'watch:shop' %}?styleFilter=Luxury"><img src="{% static 'assets/img/bg/banner10.jpg' %}" alt=""></a>
+                                <div class="banner_content">
+                                    <p>Modern and Clean</p>
+                                    <h2>Luxury Watches</h2>
+                                    <span>Selling Off 20%</span>
+                                </div>
+                            </div>
+                       </div>
+
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                       <div class="single_banner">
+                           <div class="banner_thumb">
+                                <a href="{% url 'watch:shop' %}?styleFilter=Smart"><img src="{% static 'assets/img/bg/banner11.jpg' %}" alt=""></a>
+                                <div class="banner_content">
+                                    <p>Advanced technology</p>
+                                    <h2>Smart Watches</h2>
+                                    <span>Selling Off %29</span>
+                                </div>
+                            </div>
+                       </div>
+
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                       <div class="single_banner bottom">
+                           <div class="banner_thumb">
+                                <a href="{% url 'watch:shop' %}?styleFilter=Sport"><img src="{% static 'assets/img/bg/banner12.jpg' %}" alt=""></a>
+                                <div class="banner_content">
+                                    <p>More Durable</p>
+                                    <h2>Sport Watches</h2>
+                                    <span>Selling Off 24%</span>
+                                </div>
+                            </div>
+                       </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--banner area end-->
+
+         <!--banner fullwidth start-->
+        <section class="banner_fullwidth black_fullwidth">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-12">
+                       <div class="banner_text">
+                            <p>Sale Off 20% All Products</p>
+                            <h2>New Trending Collection</h2>
+                            <span>We Believe That Good Design is Always in Season</span>
+                            <a href="{% url 'watch:shop' %}">shopping Now</a>
+
+                       </div>
+
+                    </div>
+                </div>   
+            </div>
+        </section>
+        <!--banner area end-->
+
+         <!--banner area start-->
+        <section class="banner_section banner_section_five">
+            <div class="container-fluid p-0">
+                <div class="row no-gutters">
+                    <div class="col-lg-6 col-md-12">
+                       <div class="single_banner one">
+                            <div class="banner_text">
+                                <p>New Watch 2024</p>
+                                <h2>{{first_watch.name}}</h2>
+                                <span>Only ${{first_watch.total_price}}</span>
+                                <a href="{% url 'watch:details' first_watch.id %}">Discover Now</a>
+                            </div>
+                       </div>
+
+                    </div>
+                    <div class="col-lg-6 col-md-12">
+                       <div class="single_banner two">
+                            <div class="banner_text">
+                                <p>Trending Products 2024</p>
+                                <h2>{{trend_watch.name}}</h2>
+                                <span>Only ${{trend_watch.total_price}}</span>
+                                <a href="{% url 'watch:details' trend_watch.id %}">Discover Now</a>
+                            </div>
+                       </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--banner area end-->
+
+{% endblock %}

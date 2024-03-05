@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+{% block header %}
+
+{% load static %}
+{% load basket_tags %}
+
+<div class="header_bottom sticky-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <div class="main_menu_inner">
+                   <div class="logo_sticky">
+                       <a href="index.html"><img src="{% static 'assets/img/logo/logo.png' %}" alt=""></a>
+                   </div>
+                    <div class="main_menu">
+                        <nav>
+                            <ul>
+
+                                <li ><a href="/">Home</a>
+                                </li>
+                                <li><a href="/shop/">Shop</a>
+                                </li>
+                                <li><a href="/about/">About Us</a></li>
+                                <li><a href="/contact/">Contact</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'assets/css/address.css' %}">
+
+    <!--Checkout page section-->
+    <div class="Checkout_section" id="accordion">
+       <div class="container">
+            <div class="checkout_form">
+                <div class="row mt-5">
+                    <form style="display: flex;" method="post" id="checkout-form">
+                        {% csrf_token %}
+                        <div class="col-lg-6 col-md-6 mx-3">
+                            <h3>Billing Details</h3>
+                            <div id="address-row" class="row">
+
+                                {% if address %}
+
+                                <div class="col-6 mb-20 address-info">
+                                    <p><b>First Name: </b><i>{{address.first_name}}</i></p>
+                                </div>
+                                <div class="col-6 mb-20 address-info">
+                                    <p><b>Last Name: </b><i>{{address.last_name}}</i></p>
+                                </div>
+                                <div class="col-6 mb-20 address-info">
+                                   <p><b>Company Name: </b><i>{{address.company_name}}</i></p>
+                                </div>
+                                <div class="col-6 mb-20 address-info">
+                                    <p><b>Country: </b><i>{{address.country}}</i></p>
+                                </div>
+                                <div class="col-12 mb-20 address-info">
+                                    <p><b>City: </b><i>{{address.city}}</i></p>
+                                </div>
+                                <div class="col-12 mb-20 address-info">
+                                    <p><b>Address: </b><i>{{address.address}}</i></p>
+                                </div>
+                                <div class="col-12 mb-20 address-info">
+                                    <p><b>Phone: </b><i>{{address.phone}}</i></p>
+                                </div>
+                                <div class="col-12 mb-20 address-info">
+                                    <p><b>Postal Code: </b><i>{{address.postal_code}}</i></p>
+                                </div>
+                                <div class="col-12 mb-20 address-info">
+                                    <p><b>Email: </b><i>{{address.email}}</i></p>
+                                </div>
+                                <div class="col-12 mb-20 mt-3">
+                                    <a style="border-color: orange;" class="btn btn-outline-warning" href="{% url 'account:dashboard' %}">Edit Address</a>
+                                </div>
+
+                                {% else %}
+
+                                <div class="col-lg-6 mb-20">
+                                     <div class="form-group">
+                                        <label for="id_first_name">First Name <span>*</span></label>
+                                        {{order_form.first_name}}
+
+                                         {% if order_form.first_name.errors %}
+                                            {% for error in order_form.first_name.errors %}
+                                              <li style="color: red"> {{ error|escape }} </li>
+                                            {% endfor %}
+                                         {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-20">
+                                    <div class="form-group">
+                                        <label for="id_last_name">Last Name <span>*</span></label>
+                                        {{order_form.last_name}}
+
+                                        {% if order_form.last_name.errors %}
+                                            {% for error in order_form.last_name.errors %}
+                                              <li style="color: red"> {{ error|escape }} </li>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-20">
+                                    <div class="form-group">
+                                        <label for="id_company_name">Company Name </label>
+                                        {{order_form.company_name}}
+
+                                        {% if order_form.company_name.errors %}
+                                            {% for error in order_form.company_name.errors %}
+                                              <li style="color: red"> {{ error|escape }} </li>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-20">
+                                    <div class="form-group">
+                                        <label for="id_country">Country <span>*</span></label>
+                                        {{order_form.country}}
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-20">
+                                    <div class="form-group">
+                                        <label for="id_city">Town / City <span>*</span></label>
+                                        {{order_form.city}}
+
+                                        {% if order_form.city.errors %}
+                                            {% for error in order_form.city.errors %}
+                                              <li style="color: red"> {{ error|escape }} </li>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-20">
+                                    <div class="form-group">
+                                        <label for="id_address">Address <span>*</span></label>
+                                        {{order_form.address}}
+
+                                        {% if order_form.address.errors %}
+                                            {% for error in order_form.address.errors %}
+                                              <li style="color: red"> {{ error|escape }} </li>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-20">
+                                    <div class="form-group">
+                                        <label for="id_phone">Phone<span>*</span></label>
+                                        {{order_form.phone}}
+
+                                        {% if order_form.phone.errors %}
+                                            {% for error in order_form.phone.errors %}
+                                              <li style="color: red"> {{ error|escape }} </li>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-20">
+                                    <div class="form-group">
+                                        <label for="id_postal_code">Post Code<span>*</span></label>
+                                        {{order_form.postal_code}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-20">
+                                    <div class="form-group">
+                                        <label for="id_email"> Email Address   <span>*</span></label>
+                                          {{order_form.email}}
+
+                                          {% if order_form.email.errors %}
+                                            {% for error in order_form.email.errors %}
+                                              <li style="color: red"> {{ error|escape }} </li>
+                                            {% endfor %}
+                                          {% endif %}
+                                    </div>
+                                </div>
+
+                            {% endif %}
+
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                            <h3>Your order</h3>
+                            <div class="order_table table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for watch, basket in basket.list_basket.items %}
+                                        <tr>
+                                            <td> {{watch.name}} <strong> × {{basket.quantity}}</strong></td>
+                                            <td> $ {{basket.total_price}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Cart Subtotal</th>
+                                            <td>$ {{basket.subtotal}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Shipping</th>
+                                            <td><strong>$ 50</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Coupon Discount</th>
+                                            <td><strong>- $ {% coupon_discount %}</strong></td>
+                                        </tr>
+                                        <tr class="order_total">
+                                            <th>Order Total</th>
+                                            <td><strong>$ {{basket.total_amount}}</strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div class="payment_method">
+                               <div class="panel-default">
+                                    <div id="method" class="collapse one" data-parent="#accordion">
+                                        <div class="card-body1">
+                                           <p>Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                               <div class="panel-default">
+                                    <input id="payment_defult" name="check_method" type="radio" checked data-bs-target="createp_account" />
+                                    <label for="payment_defult" data-bs-toggle="collapse" data-bs-target="#collapsedefult" aria-controls="collapsedefult"> Visa/Master <img src="{% static 'assets/img/icon/papyel.png' %}" alt=""></label>
+                                </div>
+                                <div class="order_button">
+                                    <button type="submit">Proceed to purchase</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div> 
+        </div>       
+    </div>
+    <!--Checkout page section end-->
+
+{% endblock %}

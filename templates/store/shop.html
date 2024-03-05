@@ -1,0 +1,439 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block search %}
+
+<div class="search_btn">
+    <a><i class="ion-ios-search-strong"></i></a>
+    <div class="dropdown_search">
+        <form method="GET">
+            <input placeholder="Search watch..." type="text" name="search">
+            <button type="submit"><i class="ion-ios-search-strong"></i></button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block header %}
+
+<link rel="stylesheet" href="{% static 'assets/css/filter.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/jquery-ui.min.css' %}">
+
+
+<div class="header_bottom sticky-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <div class="main_menu_inner">
+                   <div class="logo_sticky">
+                       <a href="/"><img src="{% static 'assets/img/logo/logo.png' %}" alt=""></a>
+                   </div>
+                    <div class="main_menu">
+                        <nav>
+                            <ul>
+
+                                <li ><a href="/">Home</a>
+                                </li>
+                                <li class="active"><a href="/shop/">Shop</a>
+                                </li>
+                                <li><a href="/about/">About Us</a></li>
+                                <li><a href="/contact/">Contact</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block content %}
+
+    <!--breadcrumbs area start-->
+    <div class="breadcrumbs_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb_content">
+                        <h3>Shop</h3>
+                        <ul>
+                            <li><a href="/">home</a></li>
+                            <li>></li>
+                            <li>Shop</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--breadcrumbs area end-->
+
+
+<link rel="stylesheet" href="{% static 'assets/css/price-range.css' %}">
+
+<!--shop  area start-->
+    <div class="shop_area shop_reverse">
+        <div class="container">
+            <div class="row">
+                    <div class="col-lg-3 col-md-12">
+                       <!--sidebar widget start-->
+                        <div class="sidebar_widget">
+                            <form method="GET">
+                                <div class="widget_list widget_filter">
+                                    <h2>Filter by price</h2>
+                                    <div class="price-input">
+                                        <div class="field">
+                                            <span>Min</span>
+                                            <input type="number" id="min-price" onkeydown="return false" readonly name="min-price" class="input-min" value="{{ min_price }}">
+                                        </div>
+                                        <div class="separator">-</div>
+                                        <div class="field">
+                                            <span>Max</span>
+                                            <input type="number" id="max-price" onkeydown="return false" readonly name="max-price" class="input-max" value="{{ max_price }}">
+                                        </div>
+                                    </div>
+                                    <div class="slider">
+                                        <div class="progress"></div>
+                                    </div>
+                                    <div class="range-input">
+                                        <input type="range" id="min-range" class="range-min" min="{{ min_price }}" max="{{ max_price }}" value="{{ min_price }}" step="20">
+                                        <input type="range" id="max-range" class="range-max" min="{{ min_price }}" max="{{ max_price }}" value="{{ max_price }}" step="20">
+                                    </div>
+                                </div>
+
+                                <div class="widget_list widget_brands">
+                                    <h2>Brands</h2>
+                                    <div class="filter-box">
+                                        <div class="category-box">
+                                            <ul>
+                                                {% for category in categories %}
+                                                    {% if category.watch_count %}
+                                                        <li><input id="category-{{category.id}}" type="checkbox" name="categoryFilter" value="{{category.id}}"> <label for="category-{{category.id}}"> {{category.name}} <span style="margin-left: 10px"> ({{ category.watch_count}})</span></label> </li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="widget_list widget_color">
+                                    <h2>Dial Color</h2>
+
+                                    <div class="filter-box">
+                                        <div class="category-box">
+                                            <ul>
+                                                {% for color in colors %}
+                                                    <li><input type="checkbox" id="dial-color-{{color.get_short_name}}" name="dial_color" value="{{color.name}}"> <label for="dial-color-{{color.get_short_name}}"> {{ color.name }}</label> </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="widget_list widget_color">
+                                    <h2>Band Color</h2>
+
+                                    <div class="filter-box">
+                                        <div class="category-box">
+                                            <ul>
+                                                {% for color in colors %}
+                                                    <li><input type="checkbox" id="band-color-{{color.get_short_name}}" name="band_color" value="{{color.name}}">
+                                                        <label for="band-color-{{color.get_short_name}}"> {{ color.name }}</label> </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="widget_list widget_color">
+                                    <h2>Styles</h2>
+
+                                    <div class="filter-box">
+                                        <div class="category-box">
+                                            <ul>
+                                                {% for style in styles %}
+                                                    <li><input type="checkbox" id="style-{{style.get_short_name}}" name="styleFilter" value="{{style.name}}">
+                                                        <label for="style-{{style.get_short_name}}"> {{ style.name }}</label> </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="widget_list widget_color">
+                                    <h2>Functionalities</h2>
+
+                                    <div class="filter-box">
+                                        <div class="category-box">
+                                            <ul>
+                                                {% for functionality in functionalities %}
+                                                    <li><input type="checkbox" id="functionality-{{functionality.get_short_name}}" name="functionalityFilter" value="{{functionality.name}}">
+                                                        <label for="functionality-{{functionality.get_short_name}}"> {{ functionality.name }}</label> </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="widget_list widget_color">
+                                    <h2>Movements</h2>
+
+                                    <div class="filter-box">
+                                        <div class="category-box">
+                                            <ul>
+                                                {% for movement in movements %}
+                                                    <li><input type="checkbox" id="movement-{{movement.get_short_name}}" name="movementFilter" value="{{movement.name}}">
+                                                        <label for="movement-{{movement.get_short_name}}"> {{ movement.name }}</label> </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="widget_list widget_color">
+                                    <h2>Materials</h2>
+
+                                    <div class="filter-box">
+                                        <div class="category-box">
+                                            <ul>
+                                                {% for material in materials %}
+                                                    <li><input type="checkbox" id="material-{{material.get_short_name}}" name="materialFilter" value="{{material.name}}">
+                                                        <label for="material-{{material.get_short_name}}"> {{ material.name }}</label> </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="widget_list widget_color">
+                                    <h2>Genders</h2>
+
+                                    <div class="filter-box">
+                                        <div class="category-box">
+                                            <ul>
+                                                {% for gender, nameGender in genders %}
+                                                    <li><input type="checkbox" id="gender-{{nameGender}}" name="genderFilter" value="{{gender}}">
+                                                        <label for="gender-{{nameGender}}"> {{ gender }}</label> </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button class="form-btn" type="submit">Filter</button>
+
+                            </form>
+
+                        </div>
+                        <!--sidebar widget end-->
+                    </div>
+                    <div class="col-lg-9 col-md-12">
+                        <!--shop wrapper start-->
+                        <!--shop toolbar start-->
+                        <div class="shop_toolbar">
+                            <div class="list_button">
+                                <ul class="nav" role="tablist">
+                                    <li>
+                                        <a class="active" data-bs-toggle="tab" href="#large" role="tab" aria-controls="large" aria-selected="true"><i class="ion-grid"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="orderby_wrapper">
+                                <h3>Sort By : </h3>
+                                <div class="custom-select">
+                                  <select id="short">
+                                    <option value="0">Select</option>
+                                    <option value="popularity">Sort by popularity</option>
+                                    <option value="newness">Sort by newness</option>
+                                    <option value="low">Sort by price: low to high</option>
+                                    <option value="high">Sort by price: high to low</option>
+                                  </select>
+                                </div>
+                            </div>
+                        </div>
+                        <!--shop toolbar end-->
+
+                        <!--shop tab product start-->
+                         <div class="tab-content">
+                            <div class="tab-pane grid_view fade show active" id="large" role="tabpanel">
+                                <div id="watch-container" class="row">
+
+                                 {% for watch in watches %}
+
+                                   <div id="watch-col" class="col-lg-4 col-md-4 col-sm-6">
+                                        <div class="single_product">
+                                            <div class="product_thumb">
+                                                <a class="primary_img" href="{% url 'watch:details' watch.id %}"><img style="height: 300px !important;" src="{{ watch.watchimage_set.first.image.url }}" alt=""></a>
+                                                <a class="secondary_img" href="{% url 'watch:details' watch.id %}"><img style="height: 300px !important;" src="{{ watch.watchimage_set.all.1.image.url }}" alt=""></a>
+                                                <div class="quick_button">
+                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#modal_box-{{watch.id}}" data-placement="top" data-original-title="quick view"> quick view</a>
+                                                </div>
+                                            </div>
+                                            <div class="product_content">
+                                                <div class="tag_cate">
+                                                    <a href="#">{{ watch.category.name }}</a>
+                                                </div>
+                                                <h3><a href="{% url 'watch:details' watch.id %}">{{ watch.name }}</a></h3>
+                                                <div class="price_box">
+                                                    {% if watch.discount %}
+                                                        <span class="old_price">$ {{ watch.tax_price|floatformat:2 }}</span>
+                                                    {% endif %}
+                                                        <span class="current_price">$ {{ watch.total_price|floatformat:2 }}</span>
+
+                                                </div>
+                                                <div class="product_hover">
+                                                    <div class="product_desc">
+                                                        <p>{{ watch.description|truncatewords:16 }}</p>
+                                                    </div>
+                                                    <div class="action_links">
+                                                        <ul>
+                                                            <li><a onclick="wishlist({{watch.id}})" data-placement="top" title="Add to Wishlist" data-bs-toggle="tooltip"><i id="wishlist-icon-{{watch.id}}" {% if request.user in watch.wishlist.all %} style="color: red" {% endif %} class="icon-heart"></i></a></li>
+
+                                                            <span id="shop-cart-{{watch.id}}">
+                                                                {% if watch.id in basket_status %}
+                                                                    <li class="add_to_cart"><a style="background-color: green; cursor: default; color: white;" onclick="add_to_cart({{watch.id}})" title="added">Added <i class="bi bi-cart-check-fill"></i></a></li>
+                                                                {% else %}
+                                                                    <input id="watch_qty-{{watch.id}}" min="1" max="100" value="1" type="hidden">
+                                                                    <li class="add_to_cart"><a onclick="add_to_cart({{watch.id}})" title="add to cart">add to cart</a></li>
+                                                                {% endif %}
+                                                            </span>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <!--shop tab product end-->
+                        <!--shop toolbar start-->
+                            <div class="shop_toolbar t_bottom">
+                                <a id="load_more" href=""><input type="button" class="btn btn-success" name="load_more" value="Load More"></a>
+                            </div>
+                            {% if messages %}
+                                <div class="text-center mx-5 alert alert-danger">
+                                    <ul class="messages">
+                                        {% for message in messages %}
+                                            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                {% endif %}
+                        <!--shop toolbar end-->
+                        <!--shop wrapper end-->
+                    </div>
+                </div>    
+        </div>
+    </div>
+    <!--shop  area end-->
+
+{{ total_watch|json_script:"total_watch" }}
+
+<script src="{% static 'assets/js/vendor/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static 'assets/js/jquery-ui.min.js' %}"></script>
+<script src="{% static 'assets/js/wishlist.js' %}"></script>
+<script src="{% static 'assets/js/basket.js' %}"></script>
+<script src="{% static 'assets/js/filter.js' %}"></script>
+<script src="{% static 'assets/js/price-range.js' %}"></script>
+
+
+{% endblock %}
+
+{% block modal %}
+
+{% for watch in watches %}
+
+    <!-- modal area start-->
+    <div class="modal fade" id="modal_box-{{watch.id}}" tabindex="-1" role="dialog"  aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="modal_body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-5 col-md-5 col-sm-12">
+                                <div class="modal_tab">
+                                    <div class="tab-content product-details-large">
+
+                                        <div class="tab-pane fade show active" id="tab-{{watch.id}}" role="tabpanel" >
+                                            <div class="modal_tab_img">
+                                                <a href="{% url 'watch:details' watch.id %}"><img src="{{watch.watchimage_set.first.image.url}}" alt=""></a>
+
+                                            </div>
+                                        </div>
+
+                                        {% for watch_image in watch.watchimage_set.all %}
+
+                                        <div class="tab-pane fade" id="tab-{{watch_image.id}}" role="tabpanel">
+                                            <div class="modal_tab_img">
+                                                <a href="{% url 'watch:details' watch.id %}"><img src="{{watch_image.image.url}}" alt=""></a>
+                                            </div>
+                                        </div>
+
+                                        {% endfor %}
+
+                                    </div>
+                                    <div class="modal_tab_button">
+                                        <ul class="nav product_navactive owl-carousel" role="tablist">
+
+                                            {% for watch_image_nav in watch.watchimage_set.all %}
+
+                                                <li>
+                                                     <a class="nav-link {% if watch_image_nav.id == 1 %} active {% endif %}" data-bs-toggle="tab" href="#tab-{{watch_image_nav.id}}" role="tab" aria-controls="tab-{{watch.id}}" aria-selected="false"><img src="{{watch_image_nav.image.url}}" alt=""></a>
+                                                </li>
+
+                                            {% endfor %}
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-sm-12">
+                                <div class="modal_right">
+                                    <div class="modal_title mb-10">
+                                        <h2>{{watch.name}}</h2>
+                                    </div>
+                                    <div class="modal_price mb-10">
+                                        {% if watch.discount %}
+                                            <span class="old_price">${{watch.tax_price}}</span>
+                                        {% endif %}
+                                            <span class="current_price">${{watch.total_price}}</span>
+                                    </div>
+                                     <div class="see_all">
+                                         <a href="{% url 'watch:details' watch.id %}">See all features</a>
+                                     </div>
+                                    <div class="modal_description mb-15">
+                                        <p>{{ watch.description|truncatewords:20 }}</p>
+                                    </div>
+                                    <div class="modal_social">
+                                        <h2>Share this product</h2>
+                                        <ul>
+                                            <li><a href="#"><i class="bi bi-instagram"></i></a></li>
+                                            <li><a href="#"><i class="bi bi-twitter"></i></a></li>
+                                            <li><a href="#"><i class="bi bi-pinterest"></i></a></li>
+                                            <li><a href="#"><i class="bi bi-linkedin"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal area start-->
+
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block header %}
+
+{% load static %}
+
+<div class="header_bottom sticky-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12">
+                    <div class="main_menu_inner">
+                       <div class="logo_sticky">
+                           <a href="/"><img src="{% static 'assets/img/logo/logo.png' %}" alt=""></a>
+                       </div>
+                        <div class="main_menu">
+                            <nav>
+                                <ul>
+
+                                    <li ><a href="/">Home</a>
+                                    </li>
+                                    <li><a href="{% url 'watch:shop' %}">Shop</a>
+                                    </li>
+                                    <li><a href="{% url 'about:about' %}">About Us</a></li>
+                                    <li><a href="{% url 'contact:contact' %}">Contact</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block content %}
+
+<!--faq area start-->
+    <div class="faq_content_area mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="faq_content_wrapper">
+                        <h4>Below are frequently asked questions, you may find the answer for yourself</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Accordion area-->
+    <div class="accordion_area">
+        <div class="container">
+            <div class="row">
+            <div class="col-12">
+                <div id="accordion" class="card__accordion">
+
+                    {% for faq in faqs %}
+
+                      <div class="card card_dipult">
+                        <div class="card-header card_accor" id="heading-{{faq.id}}">
+                            <button class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#collapse-{{faq.id}}" aria-expanded="true" aria-controls="collapseOne">
+                                {{faq.question}}
+
+                              <i class="fa fa-plus"></i>
+                              <i class="fa fa-minus"></i>
+
+
+                            </button>
+
+                        </div>
+
+                        <div id="collapse-{{faq.id}}" class="collapse" aria-labelledby="heading-{{faq.id}}" data-parent="#accordion">
+                          <div class="card-body">
+                               <p>{{faq.answer}}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <!--Accordion area end-->
+
+{% endblock %}

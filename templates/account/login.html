@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block header %}
+
+{% load static %}
+
+<div class="header_bottom sticky-header">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-12">
+                        <div class="main_menu_inner">
+                           <div class="logo_sticky">
+                               <a href="index.html"><img src="{% static 'assets/img/logo/logo.png' %}" alt=""></a>
+                           </div>
+                            <div class="main_menu">
+                                <nav>
+                                    <ul>
+
+                                        <li ><a href="/">Home</a>
+                                        </li>
+                                        <li><a href="/shop/">Shop</a>
+                                        </li>
+                                        <li><a href="/about/">About Us</a></li>
+                                        <li><a href="/contact/">Contact</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+
+{% block content %}
+    
+    <!-- customer login start -->
+    <div class="customer_login">
+        <div class="container">
+            <div class="row justify-content-center">
+               <!--login area start-->
+                <div class="col-lg-6 col-md-6">
+                    <div class="account_form">
+                        <h2 class="mt-5">login</h2>
+                        <form method="post">
+                            {% csrf_token %}
+                            <p>
+                                {{form.username}}
+
+                                 {% if form.username.errors %}
+                                    {% for error in form.username.errors %}
+                                        <li style="color: red"> {{ error|escape }} </li>
+                                    {% endfor %}
+                                {% endif %}
+                             </p>
+                             <p>
+                                 {{form.password}}
+
+                                 {% if form.password.errors %}
+                                    {% for error in form.password.error %}
+                                        <li style="color: red"> {{ error|escape }} </li>
+                                    {% endfor %}
+                                {% endif %}
+                                 <a style="color: #c09578" href="{% url 'account:pwd-reset' %}">Lost your password?</a>
+                             </p>
+                            <p>
+                                {% if form.non_field_errors %}
+                                    {% for error in form.non_field_errors %}
+                                        <li style="color: red"> {{ error|escape }} </li>
+                                    {% endfor %}
+                                {% endif %}
+                            </p>
+                            <div class="login_submit">
+                               <a href="{% url 'account:register' %}">Don't have a user account?</a>
+                                <button type="submit">login</button>
+                                
+                            </div>
+
+                        </form>
+                     </div>    
+                </div>
+                <!--login area start-->
+            </div>
+        </div>    
+    </div>
+    <!-- customer login end -->
+
+{% endblock %}

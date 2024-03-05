@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block header %}
+
+{% load static %}
+
+<div class="header_bottom sticky-header">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-12">
+                        <div class="main_menu_inner">
+                           <div class="logo_sticky">
+                               <a href="index.html"><img src="{% static 'assets/img/logo/logo.png' %}" alt=""></a>
+                           </div>
+                            <div class="main_menu">
+                                <nav>
+                                    <ul>
+
+                                        <li ><a href="/">Home</a>
+                                        </li>
+                                        <li><a href="/shop/">Shop</a>
+                                        </li>
+                                        <li><a href="/about/">About Us</a></li>
+                                        <li class="active"><a href="/contact/">Contact</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+
+{% block content %}
+
+    <!--breadcrumbs area start-->
+    <div class="breadcrumbs_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb_content">
+                        <h3>contact</h3>
+                        <ul>
+                            <li><a href="/">home</a></li>
+                            <li>></li>
+                            <li>Contact</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--contact area start-->
+    <div class="contact_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                   <div class="contact_message content">
+                        <h3>contact us</h3>
+                         <p>You can reach us 24/7</p>
+                        <ul>
+                            <li><i class="fa fa-fax"></i>  Address : {{about.address}} </li>
+                            <li><i class="fa fa-phone"></i> {{about.mail}} </li>
+                            <li><i class="fa fa-envelope-o"></i> {{about.phone}}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                   <div class="contact_message form">
+                        <h3>Contact Us</h3>
+                        <form id="contact-form" method="POST">
+                            {% csrf_token %}
+                            <p>
+                               <label> Your Name</label>
+                               {{ contactForm.name }}
+
+                               {% if contactForm.name.errors %}
+                                   {% for error in contactForm.name.errors %}
+                                        <p style="color: red">{{ error|escape }}</p>
+                                   {% endfor %}
+                               {% endif %}
+                            </p>
+                            <p>
+                               <label>  Your Email</label>
+                               {{ contactForm.email }}
+                            </p>
+                            <p>
+                               <label>  Subject</label>
+                                {{ contactForm.subject }}
+                            </p>
+                            <div class="contact_textarea">
+                                <label>  Your Message</label>
+                                {{ contactForm.message }}
+                            </div>
+                            <button type="submit">Send</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--contact area end-->
+
+{% endblock %}

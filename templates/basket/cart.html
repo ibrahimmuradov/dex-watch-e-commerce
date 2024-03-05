@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% block header %}
+
+{% load static %}
+{% load basket_tags %}
+
+<div class="header_bottom sticky-header">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-12">
+                        <div class="main_menu_inner">
+                           <div class="logo_sticky">
+                               <a href="index.html"><img src="{% static 'assets/img/logo/logo.png' %}" alt=""></a>
+                           </div>
+                            <div class="main_menu">
+                                <nav>
+                                    <ul>
+
+                                        <li ><a href="/">Home</a>
+                                        </li>
+                                        <li><a href="/shop/">Shop</a>
+                                        </li>
+                                        <li><a href="/about/">About Us</a></li>
+                                        <li><a href="/contact/">Contact</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+
+{% block content %}
+
+    <!--shopping cart area start -->
+    <div class="shopping_cart_area">
+        <div class="container">
+
+            {% if basket|length <= 0 %}
+
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <div class="my-5">
+                            <h3 class="pb-2">Your cart is empty</h3>
+                            <span style="font-size: 1.6rem; color: #c09578;"><a href="{% url 'watch:shop' %}">Buy New Watch</a></span>
+                        </div>
+                    </div>
+                </div>
+
+            {% else %}
+
+            <div class="row">
+                <div class="col-12 mt-5">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="table_desc">
+                            <div class="cart_page table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th class="product_remove">Delete</th>
+                                            <th class="product_thumb">Image</th>
+                                            <th class="product_name">Product</th>
+                                            <th class="product-price">Price</th>
+                                            <th class="product_quantity">Quantity</th>
+                                            <th class="product_total">Total</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    {% for watch, basket in basket.list_basket.items %}
+
+                                        <tr id="product-item-{{watch.id}}">
+                                            <input type="hidden" name="watch_id" value="{{watch.id}}">
+                                            <td class="product_remove"><a onclick="delete_from_cart({{watch.id}})"><i class="fa fa-trash-o"></i></a></td>
+                                            <td class="product_thumb"><a href="{% url 'watch:details' watch.id %}"><img src="{{watch.watchimage_set.first.image.url}}" alt=""></a></td>
+                                            <td class="product_name"><a href="{% url 'watch:details' watch.id %}">{{watch.name}}</a></td>
+                                            <td class="product-price">$ <span id="watch-price-{{watch.id}}">{{watch.get_total_price}}</span></td>
+                                            <td class="product_quantity"><label>Quantity</label> <input type="number" name="watch_quantity-{{watch.id}}" min="1" max="{{watch.stock}}" id="enter-quantity-{{watch.id}}" onchange="calculate_total_price({{watch.id}})" onkeydown="return false" value="{{basket.quantity}}"></td>
+                                            <td class="product_total">$ <span id="total-price-{{watch.id}}">{{basket.total_price}}</span></td>
+                                        </tr>
+
+                                    {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                            <div class="cart_submit">
+                                <button type="submit">update cart {{basket.length}}</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+                 <!--coupon code area start-->
+                <div class="coupon_area">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="coupon_code left">
+                                <h3>Coupon</h3>
+                                <div class="coupon_inner">
+
+                                    {% if coupon %}
+                                        <strong style="font-size: 1rem; color: ForestGreen; margin-right: 15px">Your coupon is activated
+                                        </strong>
+                                        <button style="background-color: FireBrick" onclick="removeCoupon({{coupon.id}})" type="button">Remove Coupon</button>
+                                        <br>Discount: <span style="color: ForestGreen; font-weight: 600"> {{coupon.discount_rate}} %</span>
+                                    {% else %}
+
+                                        <form method="post">
+                                            {% csrf_token %}
+
+                                            <p>Enter your coupon code if you have one.</p>
+                                            {{coupon_form.code}}
+
+
+                                            <button type="submit">Apply coupon</button>
+
+                                            {% if coupon_form.errors %}
+                                                {% for error in coupon_form.non_field_errors %}
+                                                    <h4 class="mt-2" style="color: red"> {{ error|escape }} ! </h4>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </form>
+
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                            <div class="coupon_code right">
+                                <h3>Cart Totals</h3>
+                                <div class="coupon_inner">
+                                   <div class="cart_subtotal">
+                                       <p>Subtotal</p>
+                                       <p class="cart_amount" id="cart_subtotal">$ {{basket.subtotal}}</p>
+                                   </div>
+                                   <div class="cart_subtotal ">
+                                       <p>Shipping (Flat Rate)</p>
+                                       <p class="cart_amount" id="flat-rate">+ $ {% if basket.subtotal %} 50 {% else %} 0 {% endif %} </p>
+                                   </div>
+
+                                    <div class="cart_subtotal">
+                                       <p>Coupon Discount</p>
+                                       <p class="cart_amount" id="coupon-discount">- $ {% coupon_discount %} </p>
+                                   </div>
+
+                                   <div class="cart_subtotal">
+                                       <p>Total</p>
+                                       <p class="cart_amount" id="total-amount"> $ {{ basket.total_amount }} </p>
+                                   </div>
+                                   <div class="checkout_btn">
+                                       <a href="{% if request.user.is_authenticated %} {% url 'order:checkout' %} {% else %} {% url 'account:login' %}?next={% url 'basket:cart' %} {% endif %}">Proceed to Checkout</a>
+                                   </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--coupon code area end-->
+
+            {% endif %}
+
+        </div>     
+    </div>
+    <!--shopping cart area end -->
+
+<script src="{% static 'assets/js/basket.js' %}"></script>
+<script src="{% static 'assets/js/coupon.js' %}"></script>
+
+{% endblock %}

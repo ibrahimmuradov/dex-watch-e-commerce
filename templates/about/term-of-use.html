@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block header %}
+
+{% load static %}
+
+<div class="header_bottom sticky-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12">
+                    <div class="main_menu_inner">
+                       <div class="logo_sticky">
+                           <a href="/"><img src="{% static 'assets/img/logo/logo.png' %}" alt=""></a>
+                       </div>
+                        <div class="main_menu">
+                            <nav>
+                                <ul>
+
+                                    <li ><a href="/">Home</a>
+                                    </li>
+                                    <li><a href="{% url 'watch:shop' %}">Shop</a>
+                                    </li>
+                                    <li><a href="{% url 'about:about' %}">About Us</a></li>
+                                    <li><a href="{% url 'contact:contact' %}">Contact</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block content %}
+
+<!--faq area start-->
+    <div class="faq_content_area mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="faq_content_wrapper">
+                        <h2 class="mb-3"><b>Term Of Use</b></h2>
+                            <p style="font-size: 1rem">
+                                By visiting our site and/ or purchasing something from us, you engage in our “Service” and agree to be
+                                bound by the following terms and conditions (“Terms”), including those additional
+                                terms and conditions and policies referenced herein and/or available by hyperlink. These Terms and Conditions
+                                apply to all users of the site, including without limitation users who are browsers, vendors, customers,
+                                merchants, and/ or contributors of content.
+                                <br> <br>
+                                Please read these Terms and Conditions carefully before accessing or using our website. By accessing or using
+                                any part of the site, you agree to be bound by these Terms and Conditions. If you do not agree to all the terms
+                                and conditions of this agreement, then you may not access the website or use any services. If these Terms and
+                                Conditions are considered an offer, acceptance is expressly limited to these Terms and Conditions.
+                                <br> <br>
+                                Any new features or tools which are added to the current store shall also be subject to the Terms and Conditions.
+                                You can review the most current version of the Terms and Conditions at any time on this page. We reserve the right
+                                to update, change or replace any part of these Terms and Conditions by posting updates and/or changes to our website.
+                                It is your responsibility to check this page periodically for changes. Your continued use of or access to the
+                                website following the posting of any changes constitutes acceptance of those changes.
+                            </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Accordion area-->
+    <div class="accordion_area">
+        <div class="container">
+            <div class="row">
+            <div class="col-12">
+                <div id="accordion" class="card__accordion">
+
+                    {% for term in terms %}
+
+                        <h3><b>{{term.title}}</b></h3> <br>
+
+                        <span style="font-size: 1rem">{{term.description|safe}}</span>  <br> <br>
+
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <!--Accordion area end-->
+
+{% endblock %}

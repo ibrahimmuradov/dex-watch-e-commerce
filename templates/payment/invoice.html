@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block header %}
+
+{% load static %}
+{% load basket_tags %}
+
+<div class="header_bottom sticky-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <div class="main_menu_inner">
+                   <div class="logo_sticky">
+                       <a href="index.html"><img src="{% static 'assets/img/logo/logo.png' %}" alt=""></a>
+                   </div>
+                    <div class="main_menu">
+                        <nav>
+                            <ul>
+
+                                <li ><a href="/">Home</a>
+                                </li>
+                                <li><a href="/shop/">Shop</a>
+                                </li>
+                                <li><a href="/about/">About Us</a></li>
+                                <li><a href="/contact/">Contact</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block content %}
+
+<!-- Invoice page section-->
+<div class="container my-5">
+    <div style="margin-left: 200px; margin-right: 200px;" class="card">
+      <div class="card-body mx-5">
+        <div class="container">
+          <p class="my-5 mx-5" style="font-size: 30px;">Thank for your purchase</p>
+          <div class="row">
+            <ul class="list-unstyled">
+              <li class="text-black">{{order.first_name}} {{order.last_name}}</li>
+              <li class="text-muted mt-1"><span class="text-black">Invoice ID</span> {{order.invoice_id}}</li>
+              <li class="text-black mt-1">{{order.created_at}}</li>
+            </ul>
+            <hr>
+          </div>
+            {% for item in order_item %}
+              <div class="row">
+                <div class="col-xl-10">
+                  <p>{{item.watch.name}} <strong>x {{item.quantity}}</strong></p>
+                </div>
+                <div class="col-xl-2">
+                  <p class="float-end">${{item.watch.get_total_price}}
+                  </p>
+                </div>
+                <hr>
+              </div>
+            {% endfor %}
+          <div class="row text-black">
+            <div class="col-xl-12">
+              <p class="float-end">Subtotal: $ {{order.subtotal}}</p>
+            </div>
+            <div class="col-xl-12">
+              <p class="float-end">Coupon Discount: $ {% if order.coupon_discount_value %} {{order.coupon_discount_value}} {% else %} 0 {% endif %}</p>
+            </div>
+            <div class="col-xl-12">
+              <p class="float-end">Shipping: $50.00</p>
+            </div>
+            <div class="col-xl-12">
+              <p class="float-end fw-bold">Total: ${{order.total_paid}}</p>
+            </div>
+            <hr style="border: 2px solid black;">
+          </div>
+          <div class="text-center" style="margin-top: 90px;">
+            <a href="{% url 'watch:shop' %}"><u class="text-info">Back Shop</u></a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+</div>
+<!-- Invoice page section end-->
+
+{% endblock %}

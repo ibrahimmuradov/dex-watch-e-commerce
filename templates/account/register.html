@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block header %}
+
+{% load static %}
+
+<div class="header_bottom sticky-header">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-12">
+                        <div class="main_menu_inner">
+                           <div class="logo_sticky">
+                               <a href="index.html"><img src="{% static 'assets/img/logo/logo.png' %}" alt=""></a>
+                           </div>
+                            <div class="main_menu">
+                                <nav>
+                                    <ul>
+
+                                        <li ><a href="/">Home</a>
+                                        </li>
+                                        <li><a href="/shop/">Shop</a>
+                                        </li>
+                                        <li><a href="/about/">About Us</a></li>
+                                        <li><a href="/contact/">Contact</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+
+{% block content %}
+
+    <!-- customer login start -->
+    <div class="customer_login">
+        <div class="container">
+            <div class="row justify-content-center">
+                <!--register area start-->
+                <div class="col-lg-6 col-md-6">
+                    <div class="account_form register">
+                         {% if data %}
+                            {{data}}
+                        {% else %}
+                        <h2 class="mt-5">Register</h2>
+                        <form method="post">
+                            {% csrf_token %}
+                            <p>
+                                {{form.username}}
+
+                                {% if form.username.errors %}
+                                    {% for error in form.username.errors %}
+                                        <li style="color: red"> {{ error|escape }} </li>
+                                    {% endfor %}
+                                 {% endif %}
+                             </p>
+                            <p>
+                                {{form.email}}
+
+                                {% if form.email.errors %}
+                                    {% for error in form.email.errors %}
+                                        <li style="color: red"> {{ error|escape }} </li>
+                                    {% endfor %}
+                                 {% endif %}
+                             </p>
+                             <p>
+                                {{form.password}}
+
+                                 {% if form.password.errors %}
+                                    {% for error in form.password.errors %}
+                                        <li style="color: red"> {{ error|escape }} </li>
+                                    {% endfor %}
+                                 {% endif %}
+                             </p>
+                            <p>
+                                {{form.password2}}
+
+                                {% if form.password2.errors %}
+                                    {% for error in form.password2.errors %}
+                                        <li style="color: red"> {{ error|escape }} </li>
+                                    {% endfor %}
+                                 {% endif %}
+                             </p>
+                            <div class="login_submit">
+                                <a href="{% url 'account:login' %}">Do you have a user account??</a>
+                                <button type="submit">Register</button>
+                            </div>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                <!--register area end-->
+            </div>
+        </div>
+    </div>
+    <!-- customer login end -->
+
+{% endblock %}

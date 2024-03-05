@@ -1,0 +1,343 @@
+{% extends 'base.html' %}
+{% block header %}
+
+{% load static %}
+
+<div class="header_bottom sticky-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <div class="main_menu_inner">
+                   <div class="logo_sticky">
+                       <a href="index.html"><img src="{% static 'assets/img/logo/logo.png' %}" alt=""></a>
+                   </div>
+                    <div class="main_menu">
+                        <nav>
+                            <ul>
+
+                                <li ><a href="/">Home</a>
+                                </li>
+                                <li><a href="/shop/">Shop</a>
+                                </li>
+                                <li><a href="/about/">About Us</a></li>
+                                <li><a href="/contact/">Contact</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block content %}
+
+    <!--breadcrumbs area start-->
+    <div class="breadcrumbs_area product_bread">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb_content">
+                        <ul>
+                            <li><a href="/">home</a></li>
+                            <li>></li>
+                            <li><a href="{% url 'watch:shop' %}">shop</a></li>
+                             <li>></li>
+                            <li>product details</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--breadcrumbs area end-->
+
+     <!--product details start-->
+    <div class="product_details">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                   <div class="product-details-tab">
+
+                        <div id="img-1" class="zoomWrapper single-zoom">
+                            <a href="#">
+                                <img id="zoom1" src="{{ watch.watchimage_set.first.image.url }}" data-zoom-image="{{ watch.watchimage_set.first.image.url }}" alt="big-1">
+                            </a>
+                        </div>
+
+                        <div class="single-zoom-thumb">
+                            <ul class="s-tab-zoom owl-carousel single-product-active" id="gallery_01">
+                                {% for watch_image in watch.watchimage_set.all %}
+                                    <li>
+                                        <a href="#" class="elevatezoom-gallery active" data-update="" data-image="{{ watch_image.image.url }}" data-zoom-image="{{ watch_image.image.url }}">
+                                            <img style="height: 110px !important;" src="{{ watch_image.image.url }}"/>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="product_d_right">
+                       <form method="post">
+                           {% csrf_token %}
+                            <h1>{{watch.name}}</h1>
+                            <div class="product_nav">
+                                <ul>
+                                    <li class="prev"><a href="#"><i class="fa fa-angle-left"></i></a></li>
+                                    <li class="next"><a href="#"><i class="fa fa-angle-right"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="product_ratting">
+                                <ul>
+                                    {% for rate in average_range_rating %}
+                                        <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                    {% endfor %}
+                                    <li><a href="#"> ({{watch.rating}}) customer review </a></li>
+                                </ul>
+                                <span style="color: #c09578"><strong>{{ watch.view_count }}</strong> View</span>
+                            </div>
+                            <div class="product_price">
+                                {% if watch.discount %}
+                                    <span class="old_price">${{watch.tax_price}}</span>
+                                {% endif %}
+                                <span class="current_price">${{watch.total_price}}</span>
+                            </div>
+                            <div class="product_desc">
+                                <p> {{watch.description}} </p>
+                            </div>
+
+                            <div id="add-cart-area" class="product_variant quantity">
+                                {% if cart_status %}
+                                    <button style="background: green; cursor: default;" class="button" type="button" disabled>Added <i class="bi bi-cart-check-fill"></i></button>
+                                {% else %}
+                                    <label>quantity</label>
+                                    <input id="watch_qty-{{watch.id}}" onkeydown="return false" min="1" max="{{watch.stock}}" value="1" type="number">
+                                    <button class="button" onclick="add_to_cart({{watch.id}})" type="button">add to cart</button>
+                                {% endif %}
+
+                            </div>
+                            <div class=" product_d_action">
+                               <ul>
+                                   {% if request.user in watch.wishlist.all %}
+                                        <li><a id="wishlist-text-{{watch.id}}" style="font-size: 1rem" onclick="wishlist({{watch.id}})" title="Added"><i id="wishlist-icon-{{watch.id}}" style="color: red" class="icon-heart"></i> Added </a></li>
+                                   {% else %}
+                                        <li><a id="wishlist-text-{{watch.id}}" style="font-size: 1rem" onclick="wishlist({{watch.id}})" title="Add to wishlist"><i id="wishlist-icon-{{watch.id}}" class="icon-heart"></i> Add to Wishlist</a></li>
+                                   {% endif %}
+                                   <br>
+                                   <li><i>Stock: </i> <strong>{{watch.stock}}</strong></li>
+                               </ul>
+                            </div>
+                            <div class="product_meta">
+                                <span>Category: <a href="{% url 'watch:shop' %}?categoryFilter={{watch.category.id}}">{{watch.category.name}}</a></span>
+                            </div>
+
+                        </form>
+                        <div class="priduct_social">
+                            <ul>
+                                <li><a href="#" title="facebook"><i class="bi bi-facebook"></i></a></li>
+                                <li><a href="#" title="twitter"><i class="bi bi-twitter"></i></a></li>
+                                <li><a href="#" title="pinterest"><i class="bi bi-pinterest"></i></a></li>
+                                <li><a href="#" title="linkedin"><i class="bi bi-linkedin"></i></a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--product details end-->
+
+    <!--product info start-->
+    <div class="product_d_info">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="product_d_inner">
+                        <div class="product_info_button">
+                            <ul class="nav" role="tablist">
+                                <li >
+                                    <a class="active" data-bs-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="false">Description</a>
+                                </li>
+                                <li>
+                                   <a data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Reviews (<span id="review-count">{{watch.watchreview_set.all.count}}</span>) </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="info" role="tabpanel" >
+                                <div class="product_info_content">
+                                    <p>{{ watch.description }}</p>
+                                    <div class="mt-4">
+                                        <span style="font-size: 1.8rem">Features</span>
+                                        <ul class="mt-2 m-2" style="font-size: 1rem">
+                                            <li><strong>Manufactured:</strong> {{ watch.manufactured }} </li>
+                                            <li><strong>Style:</strong> {{ watch.style }}</li>
+                                            <li><strong>Year:</strong> {{ watch.year }}</li>
+                                            <li><strong>Material:</strong> {{ watch.material }}</li>
+                                            <li><strong>Dial color:</strong> {{ watch.dial_color }}</li>
+                                            <li><strong>Band Color:</strong> {{ watch.band_color }}</li>
+                                            <li><strong>Movement:</strong> {{ watch.movement }}</li>
+                                            <li><strong>Case Size:</strong> {{ watch.case_size }}</li>
+                                            <li><strong>Functionality:</strong> {{ watch.functionality }}</li>
+                                            <li><strong>Gender:</strong> {{ watch.gender }}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="reviews" role="tabpanel" >
+                                <div class="reviews_wrapper">
+
+                                    {% for review, rating in reviews.items %}
+
+                                        <div id="review-{{review.id}}" class="reviews_comment_box">
+                                            <div class="comment_thmb">
+                                                <img src="{% static 'assets/img/blog/comment2.jpg' %}" alt="">
+                                            </div>
+                                            <div class="comment_text">
+                                                <div class="reviews_meta">
+                                                    <div class="star_rating">
+                                                        <ul>
+                                                            {% for rate in rating %}
+                                                                <li><a href="#"><i class="ion-ios-star"></i></a></li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+
+                                                    <div class="d-flex justify-content-start align-items-start">
+                                                        <p><strong> {{ review.user.username }} </strong>- {{ review.created_at }}
+                                                        {% if request.user.is_authenticated %}
+                                                            <div class="dropdown">
+                                                              <button type="button" id="dropdownMenuButton-{{review.id}}" style="background: none; border: none" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                 <i style="color: #c09578; font-size: 1.2rem" class="bi bi-three-dots-vertical"></i>
+                                                              </button>
+                                                              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-{{review.id}}">
+                                                                <li><a class="dropdown-item" onclick="deleteReview({{review.id}})">Delete Review</a></li>
+                                                              </ul>
+                                                            </div>
+                                                        {% endif %}
+                                                        </p>
+                                                    </div>
+
+                                                    <span>{{ review.review }}</span>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    {% endfor %}
+
+                                    <div class="comment_title">
+                                        <h2>Add a review </h2>
+                                    </div>
+
+                                     <form method="post">
+                                         {% csrf_token %}
+                                        <div class="product_ratting mb-10">
+                                           <h3>Your rating</h3>
+                                            <div class="stars">
+                                                <i class="bi bi-star-fill" name="1"></i>
+                                                <i class="bi bi-star-fill" name="2"></i>
+                                                <i class="bi bi-star-fill" name="3"></i>
+                                                <i class="bi bi-star-fill" name="4"></i>
+                                                <i class="bi bi-star-fill" name="5"></i>
+                                            </div>
+
+                                            <input type="hidden" name="rating" id="rating-value" value="">
+
+                                        </div>
+                                        <div class="product_review_form">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    {{ review_form.review }}
+                                                </div>
+                                            </div>
+
+                                            {% if review_form.errors %}
+                                                {% for error in review_form.non_field_errors %}
+                                                    <h4 style="color: red"> {{ error|escape }} </h4>
+                                                {% endfor %}
+                                            {% endif %}
+
+                                            <button type="submit">Submit</button>
+                                        </div>
+                                     </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--product info end-->
+
+    <!--product section area start-->
+    <section class="product_section  p_section1">
+        <div class="container">
+            <div class="row">
+               <div class="col-12">
+                    <div class="section_title">
+                        <h2>Related products</h2>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="product_area ">
+                         <div class="product_container bottom">
+                            <div class="custom-row">
+
+                                {% for related_watch in related_watches %}
+
+                                <div style="width: 17%" class="col-5">
+                                    <div class="single_product">
+                                        <div class="product_thumb">
+                                            <a class="primary_img" href="{% url 'watch:details' related_watch.id %}"><img style="height: 190px !important;" src="{{related_watch.watchimage_set.first.image.url}}" alt=""></a>
+                                            <a class="secondary_img" href="{% url 'watch:details' related_watch.id %}"><img src="{{related_watch.watchimage_set.first.image.url}}" alt=""></a>
+                                        </div>
+                                        <div class="product_content">
+                                            <div class="tag_cate">
+                                                <a href="{% url 'watch:shop' %}?categoryFilter={{related_watch.category.id}}">{{related_watch.category.name}}</a>
+                                            </div>
+                                            <h3><a href="{% url 'watch:details' related_watch.id %}">{{related_watch.name}}</a></h3>
+                                            {% if related_watch.discount %}
+                                                <span class="old_price">${{related_watch.tax_price}}</span>
+                                            {% endif %}
+                                                <span class="current_price">${{related_watch.get_total_price}}</span>
+                                            <div class="product_hover">
+                                                <div class="product_desc">
+                                                    <p>{{related_watch.description|safe|truncatewords:16}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--product section area end-->
+
+{% csrf_token %}
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="{% static 'assets/js/wishlist.js' %}"></script>
+<script src="{% static 'assets/js/review.js' %}"></script>
+<script src="{% static 'assets/js/basket.js' %}"></script>
+
+{% endblock %}

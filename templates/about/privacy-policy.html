@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block header %}
+
+{% load static %}
+
+<div class="header_bottom sticky-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12">
+                    <div class="main_menu_inner">
+                       <div class="logo_sticky">
+                           <a href="/"><img src="{% static 'assets/img/logo/logo.png' %}" alt=""></a>
+                       </div>
+                        <div class="main_menu">
+                            <nav>
+                                <ul>
+
+                                    <li ><a href="/">Home</a>
+                                    </li>
+                                    <li><a href="{% url 'watch:shop' %}">Shop</a>
+                                    </li>
+                                    <li><a href="{% url 'about:about' %}">About Us</a></li>
+                                    <li><a href="{% url 'contact:contact' %}">Contact</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block content %}
+
+<!--faq area start-->
+    <div class="faq_content_area mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="faq_content_wrapper">
+                        <h2 class="mb-3"><b>Privacy Policy</b></h2>
+                        <p style="font-size: 1rem">This page informs you of our policies regarding the collection, use,
+                            and disclosure of personal data when you use our Service and the choices you have associated with that data.
+                            <br><br>
+                        We use your data to provide and improve the Service. By using the Service, you agree to the collection and use of
+                            information in accordance with this policy. Unless otherwise defined in this Privacy Policy, terms used in this
+                             Privacy Policy have the same meanings as in our Terms and Conditions, accessible from dex.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Accordion area-->
+    <div class="accordion_area">
+        <div class="container">
+            <div class="row">
+            <div class="col-12">
+                <div id="accordion" class="card__accordion">
+
+                    {% for privacy_policy in privacy_policies %}
+
+                        <h3><b>{{privacy_policy.title}}</b></h3> <br>
+
+                        <span style="font-size: 1rem">{{privacy_policy.description|safe}}</span>  <br> <br>
+
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <!--Accordion area end-->
+
+{% endblock %}
