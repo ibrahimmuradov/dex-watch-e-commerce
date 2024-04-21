@@ -41,7 +41,7 @@ DEFAULT_APPS = [
     'django.contrib.staticfiles',
 ]
 
-THIRD_PART_APPS = [
+THIRD_PARTY_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'six',
     'mptt',
@@ -59,7 +59,7 @@ DJANGO_APPS = [
     'about',
 ]
 
-INSTALLED_APPS = DEFAULT_APPS + THIRD_PART_APPS + DJANGO_APPS
+INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + DJANGO_APPS
 
 
 MIDDLEWARE = [
