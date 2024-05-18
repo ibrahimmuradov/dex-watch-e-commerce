@@ -56,7 +56,7 @@ class UserRegisterForm(forms.ModelForm):
 
         if len(password) < 5:
             raise forms.ValidationError('Your password must be at least 5 characters')
-        if not any(char.isalpha() for char in password):
+        if any(char.isalpha() for char in password):
             raise forms.ValidationError('Your password must use at least 1 letter')
         if password != password2:
             raise forms.ValidationError('Password do not match')
